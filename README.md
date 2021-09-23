@@ -1,5 +1,10 @@
 # wsb_repository
 我个人的一些练手项目
+项目
+===================================
+帖子：int userid, String title, String content, int ID ,String title, int status , Date date, int commentcount
+评论：int id, int Userid, String content, Date date, int entityType(评论目标的类型，帖子||评论)
+消息：int id, int fromId, int toId, String conversationId, String content, Data createTime
 
 
 
@@ -52,9 +57,13 @@ OS将内存中的多个PCB块组织成链表或队列
 ----------------------------------
 临界区： 人们把在进程中访问临界资源（打印机，磁带机等）的那段代码成为临界区，若能保证各进程互斥地进入自己的临界区，便可实现进程对临界区的互斥访问；
 
-
-
-
+#####
+select/poll基于轮询机制，select一般有连接限制，poll基于链表没有连接限制，要把fd集合从用户态拷贝到内核态，耗费性能
+epoll的优点： 利用mmap()文件映射内存加速与内核空间的消息传递；即epoll使用mmap减少复制开销。
+/////select和poll都只提供了一个函数——select或者poll函数。而epoll提供了三个函数，epoll_create,epoll_ctl和epoll_wait，epoll_create是创建一个epoll句柄；epoll_ctl是注册要监听的事件类型；epoll_wait则是等待事件的产生。 - 对于第一个缺点，epoll的解决方案在epoll_ctl函数中。每次注册新的事件到epoll句柄中时（在epoll_ctl中指定EPOLL_CTL_ADD），会把所有的fd拷贝进内核，而不是在epoll_wait的时候重复拷贝。epoll保证了每个fd在整个过程中只会拷贝一次。 - 对于第二个缺点，epoll的解决方案不像select或poll一样每次都把current轮流加入fd对应的设备等待队列中，而只在epoll_ctl时把current挂一遍（这一遍必不可少）并为每个fd指定一个回调函数，当设备就绪，唤醒等待队列上的等待者时，就会调用这个回调函数，而这个回调函数会把就绪的fd加入一个就绪链表）。epoll_wait的工作实际上就是在这个就绪链表中查看有没有就绪的fd（利用schedule_timeout()实现睡一会，判断一会的效果，和select实现中的第7步是类似的）。 - 对于第三个缺点，epoll没有这个限制，它所支持的FD上限是最大可以打开文件的数目，这个数字一般远大于2048,举个例子,在1GB内存的机器上大约是10万左右，具体数目可以cat /proc/sys/fs/file-max察看,一般来说这个数目和系统内存关系很大。
+epoll基于IO事件通知机制，分为水平触发和边缘触发，
+水平: 只要fd有读写事件，epoll机会通知
+边缘：只通知一次，
 
 
 ＃JVM和JMM
@@ -72,6 +81,13 @@ JMM：主内存+每个线程对应的工作内存
 2、该变量没有包含在具有其他变量的不变式中。
 
 #####类加载过程
+类的加载需要类加载器，《加载器》有四类：启动类加载器，标准扩展类加载器，应用类加载器，用户自定义类加载器；
+如何打破双亲委派机制：自定义类加载器，重写loadclass()方法，
+
+///为什么tomcat需要打破双亲委派机制？
+web容器可能部署多个应用，每个应用依赖的jar包路径相同但是版本不同，采用双亲委派无法加载多个相同的累，所以采用隔离机制，为每个web容器单独提供一个WebAppClassLoader
+
+
 第一步加载：通过类的全限定名（包名+类名）获取该类的.class文件的二进制字节流，加载到内存
 映射成jvm能识别的结构->在内存中生成class文件。
 第二步链接：

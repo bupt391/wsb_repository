@@ -6,6 +6,16 @@
 评论：int id, int Userid, String content, Date date, int entityType(评论目标的类型，帖子||评论)
 消息：int id, int fromId, int toId, String conversationId, String content, Data createTime
 
+spring IOC和AOP怎么回答
+===========================================
+IOC翻译过来的意思是控制反转，也被称作为依赖注入。通过将主动创建对象过程变成了被动接收，编译期依赖变成了运行时依赖，以此来降低对象之间的耦合度。
+为了实现依赖注入，需要在XML内配置好依赖关系，并且将对象实例化，销毁，等过程统一交由IOC容器进行管理。这样的话，由于IOC容器将类的实例化过程透明化，
+并且创建的是单例对象，所以在方便调用方的使用同时，还减少了内存的占用。
+Spring怎么解决依赖的？　先构建对象实例，再注入属性。　有两个池子，一个成品池，一个半成品池。
+spring获取Bean有几种方式？
+ApplicationContext+ContextLoader+通过spring提供的utils类获取ApplicationContext对象。
+
+
 
 
 计算机网络
